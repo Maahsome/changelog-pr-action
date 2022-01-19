@@ -1,0 +1,24 @@
+# https://docs.github.com/en/actions/creating-actions
+name:  changelog-pr
+description:  Installs and runs changelog-pr
+
+
+# https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runs-for-composite-actions
+runs:
+  # https://docs.github.com/en/actions/creating-actions/creating-a-composite-action
+  using: composite
+
+  steps:
+    -
+      name: Download latest changelog-pr
+      shell: bash
+      run: curl -Ls https://github.com/Maahsome/changelog-pr/releases/download/$(curl -Ls https://api.github.com/repos/maahsome/changelog-pr/releases/latest | jq -r '.tag_name')/changelog-pr_linux_amd64.tar.gz | tar -zx -C ./ --strip-components=1 changelog-pr_linux_amd64/changelog-pr
+    -
+      name: Install changelog-pr
+      shell: bash
+      run: sudo install -o root -g root -m 0755 changelog-pr /usr/local/bin/changelog-pr
+    -
+      name: Get version
+      shell: bash
+      run: changelog-pr version
+
