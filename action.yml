@@ -9,6 +9,10 @@ inputs:
   token:
     description: 'Github token'
     required: true
+  verbose:
+    description: info, debug levels
+    required: false
+    default: info
 
 # https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runs-for-composite-actions
 runs:
@@ -31,7 +35,7 @@ runs:
       name: Generate ChangeLog
       shell: bash
       run: |
-        changelog-pr -g github --github-token "${{ inputs.token }}" generate --path . --since-tag "${{ inputs.previoustag }}" --release-tag "v0.0.0-NEXT" -v info --file v0.0.0-NEXT.md
+        changelog-pr -g github --github-token "${{ inputs.token }}" generate --path . --since-tag "${{ inputs.previoustag }}" --release-tag "v0.0.0-NEXT" -v "${{ inputs.verbose }}" --file v0.0.0-NEXT.md
     -
       name: 'Upload Artifact'
       uses: actions/upload-artifact@v2
