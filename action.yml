@@ -3,13 +3,17 @@ name:  changelog-pr
 description:  Installs and runs changelog-pr
 
 inputs:
-  previoustag:
+  previous_tag:
     description: 'Previous TAG to look back to'
     required: true
+  changelog_dir:
+    description: 'Place to store the running v0.0.0-NEXT.md file'
+    required: false
+    default: changelog
   token:
     description: 'Github token'
     required: true
-  verbose:
+  verbose_level:
     description: info, debug levels
     required: false
     default: info
@@ -35,11 +39,11 @@ runs:
       name: Generate ChangeLog
       shell: bash
       run: |
-        changelog-pr -g github --github-token "${{ inputs.token }}" generate --path . --since-tag "${{ inputs.previoustag }}" --release-tag "v0.0.0-NEXT" -v "${{ inputs.verbose }}" --file v0.0.0-NEXT.md
+        changelog-pr -g github --github-token "${{ secrets.GITHUB_TOKEN }}" generate --path . --since-tag "${{ inputs.previous_tag }}" --release-tag "v0.0.0-NEXT" -v "${{ inputs.verbose_level }}" --file "${{ inputs.changelog_dir }}/v0.0.0-NEXT.md"
     -
       name: 'Upload Artifact'
       uses: actions/upload-artifact@v2
       with:
         name: v0.0.0-NEXT
-        path: v0.0.0-NEXT.md
+        path: "${{ inputs.changelog_dir }}/v0.0.0-NEXT.md"
         retention-days: 1
