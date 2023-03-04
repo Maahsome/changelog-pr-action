@@ -43,8 +43,9 @@ runs:
         changelog-pr -g github --github-token "${{ inputs.token }}" generate --path . --since-tag "${{ inputs.previous_tag }}" --release-tag "v0.0.0-NEXT" -v "${{ inputs.verbose_level }}" --file "${{ inputs.changelog_dir }}/v0.0.0-NEXT.md"
     -
       name: 'Upload Artifact'
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: v0.0.0-NEXT
         path: "${{ inputs.changelog_dir }}/v0.0.0-NEXT.md"
         retention-days: 1
+
